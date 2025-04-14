@@ -19,19 +19,12 @@ class SongsListView(ListAPIView):
         queryset = Song.objects.all()
         mood = self.request.query_params.get('mood')
         genre = self.request.query_params.get('genre')
-        # print(mood)
-        # print(queryset)
-        # singer = self.request.query_params.get('singer')
-        # movie = self.request.query_params.get('movie')
+        
         if(mood):
             queryset = queryset.filter(mood__icontains=mood)
-            # print(queryset)
+    
         if(genre):
             queryset = queryset.filter(genre__icontains=genre)
-        # if(singer):
-        #     queryset = queryset.filter(singer__icontains=singer)
-        # if(movie):
-            # queryset = queryset.filter(movie__icontains=movie)
         return queryset
 
 

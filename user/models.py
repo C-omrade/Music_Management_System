@@ -8,6 +8,6 @@ class User(models.Model):
     country = models.CharField(max_length=100,blank=True,null=True)
     phone_no = models.CharField(max_length=15,blank=True,null=True)
     subscription = models.BooleanField(default=0) # 0 for normal User
-
+    
     def __str__(self):
         return self.name

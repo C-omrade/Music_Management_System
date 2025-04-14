@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'movies',
     'user',
     'rest_framework',
+    'rest_framework.authtoken',#-> For token authentication
 ]
 
 MIDDLEWARE = [
@@ -125,3 +126,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES':[
+        'rest_framework.authentication.TokenAuthentication', # Token based auth
+        'rest_framework.authentication.SessionAuthentication', # Optional: for web UI login
+    ]
+}
+
