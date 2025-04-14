@@ -44,8 +44,7 @@ INSTALLED_APPS = [
     'movies',
     'user',
     'rest_framework',
-    'rest_framework.authtoken',#-> For token authentication
-]
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -128,9 +127,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES':[
-        'rest_framework.authentication.TokenAuthentication', # Token based auth
-        'rest_framework.authentication.SessionAuthentication', # Optional: for web UI login
-    ]
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
 }
+AUTH_USER_MODEL = 'user.CustomUser'
 

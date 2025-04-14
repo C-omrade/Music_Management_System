@@ -1,8 +1,27 @@
 from rest_framework import serializers
-from .models import User
+from django.contrib.auth import get_user_model, authenticate
+from rest_framework.exceptions import AuthenticationFailed
 
-class UserSerializer(serializers.ModelSerializer):
+User = get_user_model()
+
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
     class Meta:
         model = User
-        fields = "__all__"
+        fields = ('username', 'email', 'password')
+
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        return user
+    
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        user = authenticate(**data)
+        if not user:
+            raise AuthenticationFailed("Invalid Credentials")
+        return user
 
