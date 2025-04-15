@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from base.response import BadRequest
 from user.models import CustomUser
 from rest_framework.decorators import action
-from user.serializers import DumyUserSerializer
+from user.serializers import DumyUserSerializer, CustomUserSerializer
 
 """Registraction of a new user"""
 class RegisterView(APIView):
@@ -62,6 +62,14 @@ class UserSubsubscriberViewset(viewsets.GenericViewSet):
         return Response({"Message":"Subscription Updated Successfully"})
 
 
+# List all users with subscription Plan
+class ListPremiumUser(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    serializer_class = CustomUserSerializer
+    
+    def get_queryset(self):
+        users = CustomUser.objects.filter(is_subscriber=True)
+        return users
 
         
 

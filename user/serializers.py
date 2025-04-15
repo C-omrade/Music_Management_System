@@ -31,3 +31,7 @@ class DumyUserSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = ['id','is_subscriber']
 
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = "__all__"
