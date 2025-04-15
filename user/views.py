@@ -3,9 +3,16 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from base.response import BadRequest
+from user.models import CustomUser
+from rest_framework.decorators import action
+from user.serializers import DumyUserSerializer
 
-
+# or Create a new user
 class RegisterView(APIView):
+    
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         if(serializer.is_valid()):
@@ -13,7 +20,10 @@ class RegisterView(APIView):
             return Response({'message': 'Registration Successful'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+
+# Create login system 
 class LoginView(APIView):
+    
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if(serializer.is_valid()):
@@ -24,10 +34,35 @@ class LoginView(APIView):
                 'access': str(refresh.access_token),
             })
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
-# Create login system 
-# or Create a new user
-# Display existing users(But read only and admin only)
 
+
+# Update subscription plan for user
+class UserSubsubscriberViewset(viewsets.GenericViewSet):
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    serializer_class = DumyUserSerializer
+    
+    @action(detail=False, methods=['post'], url_path='update_sub')
+    def update_sub(self, request):
+        data = request.data
+        user_id = data.get('customer_id')
+        upgrade_subscription = data.get('is_sub')
+
+        if(user_id is None):
+            return BadRequest({"error":"User id cannot be none"})
+        
+        user = CustomUser.objects.filter(id=user_id).first()
+        if(user is None):
+            return BadRequest({"error":"Invalid User Id"})
+        
+        if(upgrade_subscription is None):
+            return BadRequest({"error":"Tell something about upgrade_sub"})
+        user.is_subscriber = bool(upgrade_subscription)
+        user.save()
+        return Response({"Message":"Subscription Updated Successfully"})
+
+
+
+        
 
 
 

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'singer',
     'movies',
     'user',
+    'base',
     'rest_framework',
     ]
 
