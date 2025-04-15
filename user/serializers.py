@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework.exceptions import AuthenticationFailed
-
+from user.models import CustomUser
 User = get_user_model()
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -24,4 +24,10 @@ class LoginSerializer(serializers.Serializer):
         if not user:
             raise AuthenticationFailed("Invalid Credentials")
         return user
+    
+
+class DumyUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id','is_subscriber']
 
