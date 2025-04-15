@@ -10,7 +10,7 @@ from user.models import CustomUser
 from rest_framework.decorators import action
 from user.serializers import DumyUserSerializer
 
-# or Create a new user
+"""Registraction of a new user"""
 class RegisterView(APIView):
     
     def post(self, request):
@@ -21,7 +21,8 @@ class RegisterView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
-# Create login system 
+"""This will return one access and refresh token
+Once the user is confirmed"""
 class LoginView(APIView):
     
     def post(self, request):
