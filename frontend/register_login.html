@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login & Sign In</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background-color: #f4f4f4;
+    }
+    .container {
+      max-width: 400px;
+      margin: auto;
+      padding: 30px;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+    .response {
+      margin-top: 10px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="buttons">
+      <button onclick="setMode('login')">Login</button>
+      <button onclick="setMode('register')">Sign In</button>
+    </div>
+
+    <div>
+      <input type="text" id="username" placeholder="Username" />
+      <input type="email" id="email" placeholder="Email (only for Sign In)" />
+      <input type="password" id="password" placeholder="Password" />
+      <button onclick="submitForm()">Submit</button>
+    </div>
+
+    <div class="response" id="responseBox"></div>
+  </div>
+
+  <script>
+    let mode = 'login'; // default mode
+
+    function setMode(selectedMode) {
+      mode = selectedMode;
+      document.getElementById('responseBox').innerText = `Mode set to ${mode}`;
+    }
+
+    async function submitForm() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const email = document.getElementById('email').value;
+
+      const endpoint = mode === 'login'
+        ? 'http://localhost:8000/user/login/'
+        : 'http://localhost:8000/user/register/';
+
+      let body = {
+        username,
+        password
+      };
+
+      if (mode === 'register') {
+        body.email = email;
+      }
+
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          document.getElementById('responseBox').innerText = data.message || 'Success';
+
+          if (mode === 'login' && data.token) {
+            localStorage.setItem('token', data.token);
+            window.location.href = '/dashboard.html';
+          }
+        } else {
+          document.getElementById('responseBox').innerText = data.error || 'Something went wrong';
+        }
+      } catch (err) {
+        console.error(err);
+        document.getElementById('responseBox').innerText = 'Network error';
+      }
+    }
+  </script>
+</body>
+</html>
