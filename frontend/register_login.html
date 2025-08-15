@@ -93,11 +93,11 @@
         const data = await res.json();
 
         if (res.ok) {
-          document.getElementById('responseBox').innerText = data.message || 'Success';
+          document.getElementById('responseBox').innerText = data.response || 'Success';
 
-          if (mode === 'login' && data.token) {
-            localStorage.setItem('token', data.token);
-            window.location.href = '/dashboard.html';
+          if (mode === 'login' && data.access) {
+            localStorage.setItem('token', data.access);
+            window.location.href = 'http://127.0.0.1:8000/dashboard/';
           }
         } else {
           document.getElementById('responseBox').innerText = data.error || 'Something went wrong';
