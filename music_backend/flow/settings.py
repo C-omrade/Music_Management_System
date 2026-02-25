@@ -11,19 +11,22 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
-
+from dotenv import load_dotenv
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(os.path.join(BASE_DIR, "envs/importantvar.env"))
+load_dotenv(os.path.join(BASE_DIR, "envs/local_db.env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'qt2d)j*_ynq&y%$%%0wa1815f+gt9^aub49bwyuv@k2yz%6s+-'
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG")
 
 ALLOWED_HOSTS = []
 
@@ -92,11 +95,11 @@ WSGI_APPLICATION = 'flow.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'musicmdb',
-        'USER': 'singer',
-        'PASSWORD': 'feeling@#1234',
-        'HOST': 'localhost',
-        'PORT': '3306'
+        'NAME': os.environ.get('NAME'),
+        'USER': os.environ.get('MUSIC_USER'),
+        'PASSWORD': os.environ.get('PASSWORD'),
+        'HOST': os.environ.get('HOST'),
+        'PORT': os.environ.get('PORT')
     }
 }
 
